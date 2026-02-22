@@ -1,178 +1,156 @@
-// Scientific Calculator Pro (Node.js Version)
+/* ===============================
+   CSS - מחשבון מדעי מקצועי בסגנון Casio
+=============================== */
 
-const readline = require("readline");
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
-let isDegree = true;
-let history = [];
-
-console.log("🔬 Scientific Calculator Pro");
-console.log("Type expressions like:");
-console.log("  sin(30), cos(60), tan(45)");
-console.log("  sqrt(9), log(100)");
-console.log("  2^3, pi, e");
-console.log("Type 'mode' to toggle DEG/RAD");
-console.log("Type 'history' to see history");
-console.log("Type 'exit' to quit\n");
-
-function convertTrig(value) {
-  return isDegree ? value * Math.PI / 180 : value;
+:root {
+  --bg: #f0f0f0;
+  --calc-bg: #333;
+  --display-bg: #1a1a1a;
+  --btn-bg: #555;
+  --btn-hover: #777;
+  --operator-bg: #007bff;
+  --science-bg: #ff9500;
+  --equal-bg: #2ed573;
+  --clear-bg: #ff4757;
+  --special-bg: #9b59b6;
+  --text-color: #fff;
 }
 
-function evaluateExpression(input) {
-  try {
-
-    // Replace constants
-    input = input.replace(/pi/g, "Math.PI");
-    input = input.replace(/e/g, "Math.E");
-
-    // Replace power operator ^
-    input = input.replace(/\^/g, "**");
-
-    // Replace functions
-    input = input.replace(/sqrt\(/g, "Math.sqrt(");
-    input = input.replace(/log\(/g, "Math.log10(");
-
-    input = input.replace(/sin\(([^)]+)\)/g, (_, val) =>
-      `Math.sin(${convertTrig(eval(val))})`
-    );
-
-    input = input.replace(/cos\(([^)]+)\)/g, (_, val) =>
-      `Math.cos(${convertTrig(eval(val))})`
-    );
-
-    input = input.replace(/tan\(([^)]+)\)/g, (_, val) =>
-      `Math.tan(${convertTrig(eval(val))})`
-    );
-
-    // Check division by zero
-    if (input.includes("/0")) {
-      return "Error";
-    }
-
-    const result = eval(input);
-
-    if (!isFinite(result)) return "Error";
-
-    return result;
-
-  } catch {
-    return "Error";
-  }
+body {
+  background: var(--bg);
+  font-family: 'Arial', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-function prompt() {
-  rl.question(">> ", (input) => {
-
-    if (input.toLowerCase() === "exit") {
-      console.log("Goodbye 👋");
-      rl.close();
-      return;
-    }
-
-    if (input.toLowerCase() === "mode") {
-      isDegree = !isDegree;
-      console.log("Mode:", isDegree ? "DEG" : "RAD");
-      return prompt();
-    }
-
-    if (input.toLowerCase() === "history") {
-      console.log("📜 History:");
-      history.forEach(item => console.log(item));
-      return prompt();
-    }
-
-    const result = evaluateExpression(input);
-
-    console.log("=", result);
-
-    if (result !== "Error") {
-      history.push(input + " = " + result);
-    }
-
-    prompt();
-  });
+.calculator {
+  background: var(--calc-bg);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  width: 450px;
 }
 
-prompt();let isDegree = true;
-const display = document.getElementById("display");
-const historyDiv = document.getElementById("history");
-
-function append(val){ display.value += val; }
-function clearDisplay(){ display.value = ""; }
-
-function toggleMode(){
-  isDegree = !isDegree;
-  document.querySelector(".special").innerText = isDegree ? "DEG" : "RAD";
+.display {
+  width: 100%;
+  height: 60px;
+  margin-bottom: 15px;
+  padding: 10px;
+  font-size: 1.8rem;
+  text-align: right;
+  border-radius: 10px;
+  border: none;
+  background: var(--display-bg);
+  color: var(--text-color);
 }
 
-function convertTrig(value){
-  return isDegree ? value * Math.PI / 180 : value;
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
 }
 
-function calculate(){
-  try{
-    let expression = display.value;
-
-    if(expression.includes("/0")){
-      display.value = "Error";
-      return;
-    }
-
-    // חישוב פונקציות טריגונומטריות במעלות
-    expression = expression.replace(/Math\.sin\(([^)]+)\)/g, (_, val) =>
-      `Math.sin(${convertTrig(eval(val))})`
-    );
-    expression = expression.replace(/Math\.cos\(([^)]+)\)/g, (_, val) =>
-      `Math.cos(${convertTrig(eval(val))})`
-    );
-    expression = expression.replace(/Math\.tan\(([^)]+)\)/g, (_, val) =>
-      `Math.tan(${convertTrig(eval(val))})`
-    );
-
-    let result = eval(expression);
-
-    if(!isFinite(result)){
-      display.value = "Error";
-      return;
-    }
-
-    historyDiv.innerHTML += display.value + " = " + result + "<br>";
-    display.value = result;
-
-  } catch {
-    display.value = "Error";
-  }
+button {
+  padding: 15px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: var(--btn-bg);
+  color: var(--text-color);
+  transition: 0.2s;
 }
 
-// פונקציה לפתירת משוואות ריבועיות ax²+bx+c
-function solveQuadratic(){
-  const a = parseFloat(prompt("a ="));
-  const b = parseFloat(prompt("b ="));
-  const c = parseFloat(prompt("c ="));
+button:hover {
+  background: var(--btn-hover);
+}
 
-  if(a === 0){
-    alert("זה לא משוואה ריבועית!");
-    return;
-  }
+button:active {
+  transform: scale(0.95);
+}
 
-  const D = b*b - 4*a*c;
-  let result;
+/* סוגי כפתורים */
+.operator { background: var(--operator-bg); }
+.science { background: var(--science-bg); }
+.equal { background: var(--equal-bg); grid-column: span 2; }
+.clear { background: var(--clear-bg); }
+.special { background: var(--special-bg); }
 
-  if(D < 0){
-    result = "אין פתרונות ממשיים";
-  } else if(D === 0){
-    result = -b / (2*a);
-  } else {
-    const x1 = (-b + Math.sqrt(D)) / (2*a);
-    const x2 = (-b - Math.sqrt(D)) / (2*a);
-    result = `x₁=${x1}, x₂=${x2}`;
-  }
+/* התאמה למסכים קטנים */
+@media (max-width: 500px) {
+  .calculator { width: 95%; }
+  .display { font-size: 1.4rem; }
+  button { font-size: 0.9rem; padding: 12px; }
+}body {
+  background: linear-gradient(135deg, #1e1e2f, #3a3a5c);
+  font-family: Arial, sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  color:white;
+}
 
-  display.value = result;
-  historyDiv.innerHTML += `ax²+bx+c: ${result}<br>`;
+.calculator {
+  background: #2d2d44;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+  width: 450px;
+}
+
+.display {
+  width: 100%;
+  height: 60px;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+  text-align: right;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #1a1a1a;
+  color: white;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+}
+
+button {
+  padding: 12px;
+  font-size: 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: #555;
+  color: white;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #777;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+.operator { background: #007bff; }
+.science { background: #ff9500; }
+.equal { background: #2ed573; grid-column: span 2; }
+.clear { background: #ff4757; }
+.special { background: #9b59b6; }
+
+.history{
+  margin-top:10px;
+  background:#1e1e2f;
+  height:100px;
+  overflow:auto;
+  padding:5px;
+  font-size:12px;
+  border-radius:8px;
 }
