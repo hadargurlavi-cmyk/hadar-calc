@@ -1,0 +1,43 @@
+<div class="calculator">
+
+<input type="text" id="display" class="display" readonly placeholder="0">
+
+<div class="buttons">
+  <!-- פונקציות מדעיות -->
+  <button class="clear" onclick="clearDisplay()">C</button>
+  <button class="special" onclick="toggleMode()">DEG</button>
+  <button class="science" onclick="append('Math.PI')">π</button>
+  <button class="science" onclick="append('Math.E')">e</button>
+  <button class="science" onclick="append('Math.sqrt(')">√</button>
+  <button class="science" onclick="append('**')">^</button>
+
+  <button onclick="append('7')">7</button>
+  <button onclick="append('8')">8</button>
+  <button onclick="append('9')">9</button>
+  <button class="operator" onclick="append('/')">÷</button>
+  <button class="science" onclick="append('Math.sin(')">sin</button>
+  <button class="science" onclick="append('Math.cos(')">cos</button>
+
+  <button onclick="append('4')">4</button>
+  <button onclick="append('5')">5</button>
+  <button onclick="append('6')">6</button>
+  <button class="operator" onclick="append('*')">×</button>
+  <button class="science" onclick="append('Math.tan(')">tan</button>
+  <button class="science" onclick="append('Math.log10(')">log</button>
+
+  <button onclick="append('1')">1</button>
+  <button onclick="append('2')">2</button>
+  <button onclick="append('3')">3</button>
+  <button class="operator" onclick="append('-')">−</button>
+  <button class="science" onclick="append('Math.log(')">ln</button>
+  <button class="special" onclick="solveQuadratic()">ax²+bx+c</button>
+
+  <button onclick="append('0')">0</button>
+  <button onclick="append('.')">.</button>
+  <button class="equal" onclick="calculate()">=</button>
+  <button class="operator" onclick="append('+')">+</button>
+</div>
+
+<div class="history" id="history"></div>
+
+</div>
